@@ -4,7 +4,6 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const TopBar = () => {
   const [modalVisible, setModalVisible] = useState(false);
-
   const toggleDropdown = () => {
     setModalVisible(!modalVisible);
   };
@@ -24,6 +23,9 @@ const TopBar = () => {
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconButton}>
           <FontAwesome name="cog" size={28} style={styles.icon} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.iconButton}>
+          <FontAwesome size={28} style={styles.icon}>Login</FontAwesome>
         </TouchableOpacity>
       </View>
 
@@ -96,6 +98,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
-});
+  login: {
+  }
+ });
 
 export default TopBar;
