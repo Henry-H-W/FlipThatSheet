@@ -34,7 +34,39 @@ export default function Home() {
       <header>
         <Navbar />
       </header>
-      
+      <Box textAlign="center" mt={5}>
+          <Typography variant="h2" gutterBottom>
+            Welcome to FlipThatSheet
+          </Typography>
+          <Typography variant="h6" gutterBottom>
+            Easily turn your music sheets hands-free with head movements.
+          </Typography>
+          <Button variant="contained" color="secondary" href="/signup">
+            Get Started
+          </Button>
+        </Box>
+
+        <Grid container spacing={4} sx={{ mt: 4 }}>
+          <Grid item xs={12} sm={4}>
+            <Box textAlign="center">
+              <Typography variant="h6" gutterBottom>Upload Your Music</Typography>
+              <Typography>Store all your music for free with our cloud app</Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Box textAlign="center">
+              <Typography variant="h6" gutterBottom>Access to our FlipThatSheet Feature</Typography>
+              <Typography>Turn those pages hands free!</Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Box textAlign="center">
+              <Typography variant="h6" gutterBottom>Improve Your Posture</Typography>
+              <Typography>Record videos to improve your posture</Typography>
+            </Box>
+          </Grid>
+        </Grid>
+
       </Container>
     </ThemeProvider>
   );
