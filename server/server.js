@@ -5,12 +5,10 @@ const mongoose = require("mongoose");
 const authRoutes = require("./auth/authRoutes");
 const cors = require("cors");
 
-// Importing the modules for uploading PDF files
-const multer = require("multer");
 const pdfDetails = require("./pdfDetails");
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 
 // Setting up the necessary Middleware
 app.use(express.json());
@@ -18,14 +16,13 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 // File upload route
-app.post("/upload", async (req, res) => {
-  console.log("running server", req.body);
-  const title = req.body.title;
+app.post("/uploadPDF", async (req, res) => {
+  console.log("running server", req);
   const file = req.body.file;
 
   try {
-    console.log("Uploaded file details:", title, fileName);
-    await pdfDetails.create({ pdf: fileName, title: title });
+    console.log("Uploaded file details:", file);
+    // await pdfDetails.create({ pdf: file, title: title });
     res.status(201).send("File uploaded successfully");
   } catch (error) {
     console.error("Error uploading file:", error);
