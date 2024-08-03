@@ -5,6 +5,15 @@ import * as DocumentPicker from "expo-document-picker";
 // import RNFS from "react-native-fs";
 
 export default function NewScreen() {
+  const fetchMessage = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/");
+      const r = await response.json();
+      console.log("heyyy", r);
+    } catch (e) {
+      console.log("error", e.message);
+    }
+  };
   const _pickDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
@@ -19,7 +28,7 @@ export default function NewScreen() {
 
         // Create a new FormData object
         const formData = new FormData();
-        formData.append("name", "hi");
+        formData.append("title", "hi");
         formData.append("file", {
           filename: a.uri,
           name: a.name,
@@ -30,12 +39,12 @@ export default function NewScreen() {
         }
 
         // Send the form data to the backend
-        const response = await fetch("https://localhost:3000/upload-files", {
+        const response = await fetch("http://localhost:3000/upload-files", {
           method: "POST",
           body: formData,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          //   headers: {
+          //     "Content-Type": "multipart/form-data",
+          //   },
         });
 
         if (response.ok) {
@@ -93,6 +102,7 @@ export default function NewScreen() {
       <Button
         title="Video"
         onPress={async () => {
+          fetchMessage();
           console.log("jsadkfl;asd");
 
           //   handleCameraLaunch(false);
