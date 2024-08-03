@@ -1,9 +1,11 @@
 import { StyleSheet, View, Text } from "react-native";
 import React from "react";
+import TopBar from "@/components/navigation/navbar";
 
 export default function TabTwoScreen() {
   return (
     <View>
+
       <Text style={{ color: "red" }}>asfjklsjfl;jasd</Text>
     </View>
   );
