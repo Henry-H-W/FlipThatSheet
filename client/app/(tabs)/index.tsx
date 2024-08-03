@@ -1,60 +1,61 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Platform,
+  FlatList,
+  View,
+  Text,
+} from "react-native";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { HelloWave } from "@/components/HelloWave";
+import ParallaxScrollView from "@/components/ParallaxScrollView";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
+import SheetMusicRow from "@/components/SheetMusicRow";
+import React from "react";
 
+const sheetMusicData = [
+  { id: "1", name: "Prelude in C Major" },
+  { id: "2", name: "Moonlight Sonata" },
+  { id: "3", name: "Für Elise" },
+  // Add more sheet music items here
+];
 export default function HomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View style={styles.background}>
+      <View style={styles.titleContainer}>
+        <Text style={{ color: "#ebc221", fontWeight: 500, fontSize: 30 }}>
+          FLIP THAT SHEET
+        </Text>
+      </View>
+      {/* <View style={styles.titleContainer}> */}
+      <FlatList
+        data={sheetMusicData}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <SheetMusicRow name={item.name} />}
+        style={styles.flatList}
+      />
+      {/* </View> */}
+    </View>
+    // </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    backgroundColor: "#F5F5DC",
+    paddingVertical: 10,
+    paddingHorizontal: 50,
+  },
   titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    // flexDirection: "row",
+    alignItems: "center",
     gap: 8,
+  },
+  flatList: {
+    flex: 1,
+    backgroundColor: "#F5F5DC",
   },
   stepContainer: {
     gap: 8,
@@ -65,6 +66,6 @@ const styles = StyleSheet.create({
     width: 290,
     bottom: 0,
     left: 0,
-    position: 'absolute',
+    position: "absolute",
   },
 });
