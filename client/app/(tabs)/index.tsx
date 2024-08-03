@@ -9,6 +9,7 @@ import {
 
 import SheetMusicRow from "@/components/SheetMusicRow";
 import React from "react";
+import TopBar from "@/components/navigation/navbar";
 
 const sheetMusicData = [
   { id: "1", name: "Prelude in C Major" },
@@ -18,6 +19,11 @@ const sheetMusicData = [
 ];
 export default function HomeScreen() {
   return (
+    <View style={{
+      flex: 1,
+      backgroundColor: "#F5F5DC",
+    }}>
+      <TopBar/>
     <View style={styles.background}>
       <View style={styles.inner}>
         <View style={styles.titleContainer}>
@@ -34,6 +40,7 @@ export default function HomeScreen() {
         />
       </View>
       {/* </View> */}
+    </View>
     </View>
     // </ParallaxScrollView>
   );
