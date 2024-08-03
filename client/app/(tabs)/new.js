@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Button } from "react-native";
 // import { launchCamera } from "react-native-image-picker";
 import * as DocumentPicker from "expo-document-picker";
@@ -111,8 +111,9 @@ export default function NewScreen() {
         }}
       />
       <Button
-        title="Gallary"
+        title={direction}
         onPress={async () => {
+          fetchHead();
           console.log("jsdflksfd");
           //   uploadFileOnPressHandler();
         }}
