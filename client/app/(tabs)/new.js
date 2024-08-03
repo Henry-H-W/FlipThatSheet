@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Button } from "react-native";
 // import { launchCamera } from "react-native-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 // import RNFS from "react-native-fs";
 
 export default function NewScreen() {
+  const [direction, setDirection] = useState(2);
+
+  const fetchHead = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/");
+      const r = await response.json();
+      console.log("heyyy", r);
+      setDirection(r);
+    } catch (e) {
+      co;
+    }
+  };
   const fetchMessage = async () => {
     try {
       const response = await fetch("http://localhost:3000/");
@@ -109,8 +121,9 @@ export default function NewScreen() {
         }}
       />
       <Button
-        title="Gallary"
+        title={direction}
         onPress={async () => {
+          fetchHead();
           console.log("jsdflksfd");
           //   uploadFileOnPressHandler();
         }}
