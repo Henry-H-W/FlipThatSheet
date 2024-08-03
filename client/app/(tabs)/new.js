@@ -5,15 +5,17 @@ import * as DocumentPicker from "expo-document-picker";
 // import RNFS from "react-native-fs";
 
 export default function NewScreen() {
-  const fetchMessage = async () => {
+  const getTest = async () => {
     try {
+      // Update the URL to match the correct backend address
       const response = await fetch("http://localhost:3000/");
-      const r = await response.json();
-      console.log("heyyy", r);
-    } catch (e) {
-      console.log("error", e.message);
+      const json = await response.json();
+      console.log('Response:', json);
+    } catch (error) {
+      console.error(error);
     }
-  };
+  }
+  
   const _pickDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
@@ -24,29 +26,29 @@ export default function NewScreen() {
       if (result.assets.length > 0) {
         // console.log(result.assets[0].uri);
         const a = result.assets[0];
-        console.log("asjdfljadslkf", a);
-
+        console.log("asjdfljadslkf", a.uri);
+  
         // Create a new FormData object
         const formData = new FormData();
         formData.append("title", "hi");
         formData.append("file", {
-          filename: a.uri,
+          fileName: a.uri,
           name: a.name,
           type: "application/pdf",
         });
         for (var key of formData.entries()) {
           console.log(key[0] + ", " + key[1]);
         }
-
+  
         // Send the form data to the backend
         const response = await fetch("http://localhost:3000/upload-files", {
           method: "POST",
           body: formData,
-          //   headers: {
-          //     "Content-Type": "multipart/form-data",
-          //   },
+          // headers: {
+          //   "Content-Type": "multipart/form-data",
+          // },
         });
-
+  
         if (response.ok) {
           console.log("File uploaded successfully");
         } else {
@@ -102,8 +104,8 @@ export default function NewScreen() {
       <Button
         title="Video"
         onPress={async () => {
-          fetchMessage();
           console.log("jsadkfl;asd");
+          getTest()
 
           //   handleCameraLaunch(false);
         }}
