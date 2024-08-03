@@ -19,28 +19,30 @@ const sheetMusicData = [
 ];
 export default function HomeScreen() {
   return (
-    <View style={{
-      flex: 1,
-      backgroundColor: "#F5F5DC",
-    }}>
-      <TopBar/>
-    <View style={styles.background}>
-      <View style={styles.inner}>
-        <View style={styles.titleContainer}>
-          <Text style={{ color: "#ebc221", fontWeight: 500, fontSize: 30 }}>
-            FLIP THAT SHEET
-          </Text>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "#F5F5DC",
+      }}
+    >
+      <TopBar />
+      <View style={styles.background}>
+        <View style={styles.inner}>
+          <View style={styles.titleContainer}>
+            <Text style={{ color: "#ebc221", fontWeight: 500, fontSize: 30 }}>
+              FLIP THAT SHEET
+            </Text>
+          </View>
+          {/* <View style={styles.titleContainer}> */}
+          <FlatList
+            data={sheetMusicData}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => <SheetMusicRow name={item.name} />}
+            style={styles.flatList}
+          />
         </View>
-        {/* <View style={styles.titleContainer}> */}
-        <FlatList
-          data={sheetMusicData}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <SheetMusicRow name={item.name} />}
-          style={styles.flatList}
-        />
+        {/* </View> */}
       </View>
-      {/* </View> */}
-    </View>
     </View>
     // </ParallaxScrollView>
   );
