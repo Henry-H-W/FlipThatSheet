@@ -47,7 +47,6 @@ export default function Home() {
         <header>
           <Navbar />
         </header>
-        <Button onClick={handle}>asdfkl;jasdf</Button>
         <FileUpload />
       </Container>
     </ThemeProvider>
