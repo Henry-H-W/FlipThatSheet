@@ -33,6 +33,11 @@ const theme = createTheme({
   },
 });
 
+const handleLogin = () => {
+  // Redirect to Auth0 login page
+  window.location.href = '/api/auth/login';
+};
+
 export default function Home() {
   const handle = async () => {
     console.log("handle");
@@ -54,12 +59,12 @@ export default function Home() {
           <Typography variant="h6" gutterBottom>
             Easily turn your music sheets hands-free with head movements.
           </Typography>
-          <Button variant="contained" color="secondary" href="/signup">
+          <Button variant="contained" color="secondary" onClick={handleLogin}>
             Get Started
           </Button>
         </Box>
 
-        <Grid container spacing={4} sx={{ mt: 4 }}>
+        <Grid container spacing={15} sx={{ mt: 4 }}>
           <Grid item xs={12} sm={4}>
             <Box textAlign="center">
               <Typography variant="h6" gutterBottom>
