@@ -1,84 +1,80 @@
-const express = require("express");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const User = require("../models/userModel"); // Ensure this path is correct
+// Importing the modules for authentication and MongoDB connection
 require("dotenv").config();
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
 
-const router = express.Router();
 
-// Route for user registration (signup)
-router.post("/signup", async (req, res) => {
-  const { email, password } = req.body;
+const app = express();
+const port = process.env.PORT || 8000;
 
-  try {
-    // Check if the user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ error: "User already exists" });
-    }
+// Making the folder accessible everywhere
+app.use("/files", express.static("files"));
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-    // Create a new user
-    const user = new User({ email, password: hashedPassword });
-    await user.save();
+// Setting up the necessary Middleware
+app.use(express.json());
+app.use(cors());
 
-    res.status(201).json({ message: "User created successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to create user" });
+// Installing multer
+const multer  = require('multer')
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./files")
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now()
+    cb(null, uniqueSuffix + file.originalname)
   }
+})
+
+require("./pdfDetails")
+const pdfSchema = mongoose.model("pdfDetails")
+const upload = multer({ storage: storage })
+
+// Creating the api
+app.post("/upload-files", upload.single("file"), async (req, res) => {
+  console.log(req.file)
+  const title = req.body.title
+  const fileName = req.file.filename
+  
+  try {
+    await pdfSchema.create({
+      title: title,
+      pdf: fileName
+    })
+    res.send({ message: "File uploaded successfully" })
+  } catch (error) {
+    res.json({ message: error })
+  }
+})
+
+// Test to see if backend works
+app.get("/", async (req, res) => {
+  res.json({ message: "Hello, World!" });
 });
 
-// Route for user login
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-
+// Getting the files from mongoDB globally
+app.get("/get-files", async (req, res) => {
   try {
-    // Find the user by email
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ error: "Invalid email or password" });
-    }
-
-    // Compare the provided password with the stored hashed password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(400).json({ error: "Invalid email or password" });
-    }
-
-    // Generate a JWT token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+    pdfSchema.find({}).then((data) => {
+      res.send({ status: "ok", data: data });
     });
-
-    res.status(200).json({ token });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to login" });
-  }
+  } catch (error) {}
 });
+// Connect to MongoDB
+const mongoUrl = process.env.MONGODB_URI
 
-// Middleware for protecting routes
-const requireAuth = (req, res, next) => {
-  // Retrieve the token from the Authorization header
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) {
-    return res
-      .status(401)
-      .json({ error: "No token provided, authorization denied" });
-  }
-
-  try {
-    // Verify the token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // Attach decoded token payload to the request object
-    next(); // Call the next middleware or route handler
-  } catch (error) {
-    console.error("JWT verification error:", error);
-    res.status(401).json({ error: "Token is not valid" });
-  }
-};
-
-// Export the router and middleware
-module.exports = { router, requireAuth };
+mongoose
+  .connect(mongoUrl, {
+    useNewUrlParser: true,
+  })
+  .then(() => {
+    console.log("Connected to MongoDB");
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+  });

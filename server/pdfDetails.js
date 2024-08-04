@@ -1,11 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const pdfDetailsSchema = new mongoose.Schema(
-  {
-    pdf: Buffer,
+const pdfschema = new mongoose.Schema(
+    {
+    pdf: String,
     title: String,
-  },
-  { collection: "pdfDetails" }
-);
+    }, 
+    { collection: "pdfDetails" });
 
-module.exports = mongoose.model("pdfDetails", pdfDetailsSchema);
+mongoose.model("pdfDetails", pdfschema);
