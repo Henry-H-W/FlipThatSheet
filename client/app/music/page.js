@@ -23,6 +23,7 @@ const Music = () => {
         formData.append("title", title);
         formData.append("file", file);
         console.log(title, file)
+
         const result = await axios.post("http://localhost:8000/upload-files", formData, 
             {
                 headers: {
@@ -32,6 +33,10 @@ const Music = () => {
         );
         console.log(result);
     };
+
+    const openSheetMusic = (pdf) => {
+      window.open(`http://localhost:8000/files/${pdf}`, "_blank", "noreferrer");
+    }
 
   return (
     <div>
@@ -58,6 +63,26 @@ const Music = () => {
           Submit
         </button>
       </form>
+      <div className="uploaded">
+        <h4>Uploaded PDF:</h4>
+        <div className="output-div">
+          {allImage == null
+            ? ""
+            : allImage.map((data) => {
+                return (
+                  <div className="inner-div">
+                    <h6>Title: {data.title}</h6>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => openSheetMusic(data.pdf)}
+                    >
+                      Open Your Sheet Music
+                    </button>
+                  </div>
+                );
+              })}
+        </div>
+      </div>
     </div>
   )
 }
