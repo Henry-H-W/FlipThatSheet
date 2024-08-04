@@ -6,26 +6,26 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import { NavButton, AuthButton, Logo } from './styles';
 
 const NavbarContainer = styled(Box)({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  padding: '10px 20px',
-  borderRadius: '25px',
-  border: '2px solid #ADD8E6',
-  boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.2)',
-  maxWidth: '100%', 
-  margin: '20px auto',
-  height: '60px',
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  padding: "10px 20px",
+  borderRadius: "25px",
+  border: "2px solid #ADD8E6",
+  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.2)",
+  maxWidth: "100%",
+  margin: "20px auto",
+  height: "60px",
 });
 
 const LeftSection = styled(Box)({
-  display: 'flex',
-  alignItems: 'center',
+  display: "flex",
+  alignItems: "center",
 });
 
 const RightSection = styled(Box)({
-  display: 'flex',
-  alignItems: 'center',
+  display: "flex",
+  alignItems: "center",
 });
 
 const Navbar = () => {
