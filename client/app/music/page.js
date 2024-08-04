@@ -31,7 +31,10 @@ const Music = () => {
                 },
             }
         );
-        console.log(result);
+        if (result.statusText == "OK") {
+          alert("Uploaded Successfully!!!");
+          getPdf();
+        }
     };
 
     const openSheetMusic = (pdf) => {
@@ -76,7 +79,7 @@ const Music = () => {
                       className="btn btn-primary"
                       onClick={() => openSheetMusic(data.pdf)}
                     >
-                      Open Your Sheet Music
+                      Open Sheet Music
                     </button>
                   </div>
                 );
