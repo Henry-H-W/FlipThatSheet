@@ -47,7 +47,6 @@ export default function Home() {
         <header>
           <Navbar />
         </header>
-        <FileUpload />
         <Box textAlign="center" mt={5}>
           <Typography variant="h2" gutterBottom>
             Welcome to FlipThatSheet
