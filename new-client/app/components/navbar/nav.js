@@ -31,16 +31,13 @@ const Navbar = () => {
     return (
       <NavbarContainer>
         <LeftSection>
-          <Logo src="/groceries.svg" onClick={() => window.location.href = '/'} />
-          <Link href="/mypantry" passHref>
-            <NavButton component="a">My Pantry</NavButton>
+          <Logo src="/music.svg" onClick={() => window.location.href = '/'} />
+          <Link href="/music" passHref>
+            <NavButton component="a">Music</NavButton>
           </Link>
-          <Link href="/recipes" passHref>
-            <NavButton component="a">Recipes</NavButton>
+          <Link href="/recordings" passHref>
+            <NavButton component="a">Recordings</NavButton>
           </Link>
-          {/* <Link href="/shoppinglist" passHref>
-            <NavButton component="a">Shopping List</NavButton>
-          </Link> */}
         </LeftSection>
         <RightSection>
           <Link href="/login" passHref>

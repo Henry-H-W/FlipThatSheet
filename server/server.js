@@ -1,55 +1,84 @@
-// Importing the modules for authentication and MongoDB connection
-require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
-const authRoutes = require("./auth/authRoutes");
-const cors = require("cors");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const User = require("../models/userModel"); // Ensure this path is correct
+require("dotenv").config();
 
-const pdfDetails = require("./pdfDetails");
+const router = express.Router();
 
-const app = express();
-const port = process.env.PORT || 8000;
-
-// Setting up the necessary Middleware
-app.use(express.json());
-app.use(cors());
-app.use(express.urlencoded({ extended: true }));
-
-// File upload route
-app.post("/uploadPDF", async (req, res) => {
-  console.log("running server", req);
-  const file = req.body.file;
+// Route for user registration (signup)
+router.post("/signup", async (req, res) => {
+  const { email, password } = req.body;
 
   try {
-    console.log("Uploaded file details:", file);
-    // await pdfDetails.create({ pdf: file, title: title });
-    res.status(201).send("File uploaded successfully");
+    // Check if the user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: "User already exists" });
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    // Create a new user
+    const user = new User({ email, password: hashedPassword });
+    await user.save();
+
+    res.status(201).json({ message: "User created successfully" });
   } catch (error) {
-    console.error("Error uploading file:", error);
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ error: "Failed to create user" });
   }
 });
 
-// Routes
-app.use("/auth", authRoutes);
+// Route for user login
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
 
-// test to see if backend works
-app.get("/", (req, res) => {
-  res.json({ message: "Hello, World!" });
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: "Invalid email or password" });
+    }
+
+    // Compare the provided password with the stored hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ error: "Invalid email or password" });
+    }
+
+    // Generate a JWT token
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    res.status(200).json({ token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to login" });
+  }
 });
 
-// Connect to MongoDB
-mongoose
-  .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/auth", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("Connected to MongoDB");
-    app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
-    });
-  })
-  .catch((error) => {
-    console.error("Error connecting to MongoDB:", error);
-  });
+// Middleware for protecting routes
+const requireAuth = (req, res, next) => {
+  // Retrieve the token from the Authorization header
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+    return res
+      .status(401)
+      .json({ error: "No token provided, authorization denied" });
+  }
+
+  try {
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; // Attach decoded token payload to the request object
+    next(); // Call the next middleware or route handler
+  } catch (error) {
+    console.error("JWT verification error:", error);
+    res.status(401).json({ error: "Token is not valid" });
+  }
+};
+
+// Export the router and middleware
+module.exports = { router, requireAuth };
