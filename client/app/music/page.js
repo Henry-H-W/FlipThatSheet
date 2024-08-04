@@ -147,10 +147,8 @@ const Music = () => {
       {/* {selectedFile && ( */}
       <Modal open={selectedFile} style={styles.container}>
         <div>
-          \
           <div
             style={{
-              backgroundColor: "red",
               width: "100%",
             }}
           >
@@ -159,22 +157,57 @@ const Music = () => {
               style={{ position: "absolute", zIndex: 8, right: 480, top: 20 }}
               onClick={() => setSelectedFile("")}
             />
-            <Document
-              file={"finding-related-tables.pdf"}
-              onLoadSuccess={onDocumentLoadSuccess}
-            >
+
+            {/* <div>
+              <div className="pagec">
+                Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}
+              </div>
+              <div className="buttonc">
+                <div
+                  type="button"
+                  disabled={pageNumber <= 1}
+                  onClick={previousPage}
+                  className="Pre"
+                >
+                  Previous
+                </div>
+                <div
+                  style={{ color: "red" }}
+                  className="button"
+                  type="button"
+                  disabled={pageNumber >= numPages}
+                  onClick={nextPage}
+                >
+                  Nextadfasdf
+                </div>
+              </div>
+            </div> */}
+            <Document file={selectedFile} onLoadSuccess={onDocumentLoadSuccess}>
               <Page
                 pageNumber={pageNumber}
                 renderTextLayer={false}
                 renderAnnotationLayer={false}
               />
             </Document>
+            <div
+              className="pagec"
+              style={{
+                zIndex: 80,
+                position: "absolute",
+                bottom: 10,
+                marginLeft: 15,
+              }}
+            >
+              Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}
+            </div>
           </div>
         </div>
       </Modal>
       {/* )} */}
 
       <div>
+        <img hidden={true} src="http://localhost:5000/video_feed" alt="Video" />
+
         <form className="formStyle" onSubmit={submitImage}>
           <Box textAlign="center" mt={5}>
             <Typography variant="h3" gutterBottom>
@@ -214,7 +247,21 @@ const Music = () => {
                     <h6>Title: {data.title}</h6>
                     <button
                       className="btn btn-primary"
-                      onClick={() => openSheetMusic(data.pdf)}
+                      onClick={async () => {
+                        openSheetMusic(data.pdf);
+                        const response = await fetch(
+                          "http://localhost:5000/requests",
+                          {
+                            method: "POST",
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
+                          }
+                        );
+                        if (response.ok) {
+                          console.log("it worked");
+                        }
+                      }}
                     >
                       Open Sheet Music
                     </button>
