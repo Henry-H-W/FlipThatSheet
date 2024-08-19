@@ -18,7 +18,7 @@ Frontend:
 - Libraries: Material-UI, Tailwind CSS
 
 Backend: 
-- Languages & Frameworks: Python, Flask, Express, Node.js
+- Languages & Frameworks: Python, Flask, Express.js, Node.js
 
 Databases: 
 - Primary Database: MongoDB
