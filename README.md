@@ -15,10 +15,10 @@ FlipThatSheet is an innovative solution designed to help musicians in turning mu
 
 Frontend: 
 - Frameworks & Libraries: Next.js, React
-- Libraries: Material-UI, Tailwind CSS
+- Styling: Material-UI, Tailwind CSS
 
 Backend: 
-- Languages & Frameworks: Python, Flask, Express, Node.js
+- Languages & Frameworks: Python, Flask, Express.js, Node.js
 
 Databases: 
 - Primary Database: MongoDB
