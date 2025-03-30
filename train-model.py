@@ -53,7 +53,7 @@ print(model.layers)
 
 model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['categorical_accuracy'])
 
-model.fit(X_train, y_train, epochs=150, callbacks=[tb_callback])
+model.fit(X_train, y_train, epochs=200, callbacks=[tb_callback])
 model.summary()
 
 res = model.predict(X_test)

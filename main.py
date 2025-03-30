@@ -1,3 +1,4 @@
+from flask import Flask, render_template, Response, request, app
 import tensorflow as tf
 import cv2
 import numpy as np
@@ -6,6 +7,8 @@ import mediapipe as mp
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
 from matplotlib import pyplot as plt
+
+app = Flask(__name__)
 
 # Setup medaipipe
 mp_holistic = mp.solutions.holistic  # Holistic model
@@ -48,14 +51,38 @@ def predict(sequence):
     res = headModel.predict(np.expand_dims(np.array(sequence), axis=0))
     return res
 
+# Communicate with frontend
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/requests',methods=['POST','GET'])
+def tasks():
+    global run,cap
+    if request.method == 'POST':
+        if request.form.get('click') == 'Start':
+            if (run == 1):
+                run = 0
+                cap.release()
+                cv2.destroyAllWindows()
+
+            else:
+                cap = cv2.VideoCapture(0)
+                run = 1
+
+
+
 # Setup webcam
 cap = cv2.VideoCapture(0)
 
+# global sequence, predTimer, lastPred, actions, run, prediction
 # Records 20 frame sequences of mediapipe landmarks
 sequence = []
 predTimer = 0
 lastPred = ''
 actions = ['Left', 'Right', 'Neutral']
+run = 1
+prediction = ''
 
 headModel = Sequential()
 headModel.add(LSTM(64, return_sequences=True, activation='relu', input_shape=(20,1536)))
@@ -68,7 +95,7 @@ headModel.add(Dense(3, activation='softmax'))
 headModel.load_weights('headTiltModel.h5')
 
 with mp_holistic.Holistic(min_detection_confidence=0.9, min_tracking_confidence=0.9) as holistic:
-    while cap.isOpened():
+    while cap.isOpened() and run == 1:
 
         # Read feed from webcam
         ret, frame = cap.read()
@@ -91,7 +118,7 @@ with mp_holistic.Holistic(min_detection_confidence=0.9, min_tracking_confidence=
             prediction = np.argmax(res)
 
             if(prediction == 0 or prediction == 1):
-                if(res[0][prediction] < 0.85):
+                if(res[0][prediction] < 0.80):
                     prediction = 2
 
             cv2.putText(image, actions[prediction] + " " + str(res[0][prediction]),

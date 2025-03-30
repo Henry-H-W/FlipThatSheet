@@ -8,7 +8,7 @@ mp_holistic = mp.solutions.holistic  # Holistic model
 mp_drawing = mp.solutions.drawing_utils  # Drawing utilities
 
 # Setup file path for data
-DATA_PATH = os.path.join('MP_Landmarks')
+DATA_PATH = os.path.join('MP_Demo')
 
 # Mediapipe pose detection function
 def mediapipe_detection(image, model):
@@ -41,16 +41,16 @@ def extract_keypoints(results):
     return np.concatenate([pose, face])
 
 # List of actions
-actions = ['Neutral']
+actions = ['Left']
 
 # Num of videos worth of data
-no_sequences = 80
+no_sequences = 40
 # Videos will have this many frames
 sequence_length = 20
 
 # Make folders
 for action in actions:
-    for sequence in range(0, no_sequences):
+    for sequence in range(0, 0+no_sequences):
         try:
             os.makedirs(os.path.join(DATA_PATH, action, str(sequence)))
         except:
@@ -60,7 +60,7 @@ cap = cv2.VideoCapture(0)  # Setup webcam
 
 with mp_holistic.Holistic(min_detection_confidence=0.9, min_tracking_confidence=0.9) as holistic:
     for action in actions:
-        for sequence in range(0, no_sequences):
+        for sequence in range(0, 0+no_sequences):
             for frame_num in range(sequence_length):
 
                 # Read feed from webcam
